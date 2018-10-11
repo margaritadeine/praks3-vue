@@ -3,7 +3,8 @@
    <h1>Numbri faktid</h1>
     <p>Huvitavad faktid iga numbri kohta</p>
    <input type="number" min="0" v-model="number">
-   <p>{{ data }}</p>
+   <input type="number" min="0" v-model="incriment">
+   <p v-for=''>{{ data }}</p>
     </div>
 </template>
 
@@ -15,13 +16,16 @@ export default {
   data() {
       return {
          data: '',
-          number: 0
+          number: 0, 
+          incriment: 0
         }
     },
-    watch: {
-        number () {
-            if (this.number !== '') {
-              let url = `http://numbersapi.com/${this.number}`
+    methods: {
+        getFact () {
+            if (this.number !== '' && this.incriment !== '') {
+                 let baseUrl = 'http://numbersapi.com/'
+              let url = `${baseUrl}${this.number}..${parseInt(this.number) + parseInt(this.incriment)}`;
+             
             
             axios.get(url)
             .then(response => {
@@ -30,10 +34,18 @@ export default {
             .catch(error => {
                 console.log(error)  
             
-                })
-            }
+            })
         }
-    }
+        }
+    },
+    watch: {
+        number () {
+            this.getFact()
+        },
+        incriment () {
+            this.getFact()
+        }
+    },
 }
 </script>
 
